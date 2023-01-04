@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "liver_scores",
+  "info": {
+    "singularName": "liver-score",
+    "pluralName": "liver-scores",
+    "displayName": "liver_score",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "steatosis": {
+      "type": "integer"
+    },
+    "perfusion": {
+      "type": "integer"
+    },
+    "consider_transplant": {
+      "type": "boolean"
+    },
+    "image": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::image.image",
+      "inversedBy": "liver_scores"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "liver_scores"
+    },
+    "liver_score_id": {
+      "type": "uid"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "images",
+  "info": {
+    "singularName": "image",
+    "pluralName": "images",
+    "displayName": "image",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "filename": {
+      "type": "string"
+    },
+    "image_id": {
+      "type": "uid"
+    },
+    "organ": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organ.organ",
+      "inversedBy": "images"
+    },
+    "liver_scores": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::liver-score.liver-score",
+      "mappedBy": "image"
+    }
+  }
+}

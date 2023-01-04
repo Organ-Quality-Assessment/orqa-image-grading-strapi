@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organs",
+  "info": {
+    "singularName": "organ",
+    "pluralName": "organs",
+    "displayName": "Organ"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "organ_type": {
+      "type": "string"
+    },
+    "organ_id": {
+      "type": "uid"
+    },
+    "images": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::image.image",
+      "mappedBy": "organ"
+    }
+  }
+}
