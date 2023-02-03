@@ -4,10 +4,11 @@
   "info": {
     "singularName": "comparison",
     "pluralName": "comparisons",
-    "displayName": "comparison"
+    "displayName": "comparison",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -17,13 +18,18 @@
       "target": "api::image.image",
       "inversedBy": "comparisons"
     },
-    "real": {
-      "type": "boolean"
-    },
     "users_permissions_user": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "real": {
+      "type": "enumeration",
+      "enum": [
+        "real",
+        "artificial",
+        "unsure"
+      ]
     }
   }
 }
