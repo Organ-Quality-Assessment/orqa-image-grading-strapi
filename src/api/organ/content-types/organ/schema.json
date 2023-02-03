@@ -4,7 +4,8 @@
   "info": {
     "singularName": "organ",
     "pluralName": "organs",
-    "displayName": "Organ"
+    "displayName": "Organ",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -13,9 +14,6 @@
   "attributes": {
     "organ_type": {
       "type": "string"
-    },
-    "organ_id": {
-      "type": "uid"
     },
     "images": {
       "type": "relation",

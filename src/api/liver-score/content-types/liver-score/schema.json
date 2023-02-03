@@ -12,13 +12,7 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "steatosis": {
-      "type": "integer"
-    },
-    "perfusion": {
-      "type": "integer"
-    },
-    "consider_transplant": {
+    "transplantable": {
       "type": "boolean"
     },
     "image": {
@@ -33,8 +27,8 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "liver_scores"
     },
-    "liver_score_id": {
-      "type": "uid"
+    "quality": {
+      "type": "decimal"
     }
   }
 }

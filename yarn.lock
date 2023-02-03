@@ -9318,6 +9318,11 @@ strapi-plugin-entity-relationship-chart@^4.1.0:
     dagre "^0.8.5"
     lodash "^4.17.21"
 
+strapi-plugin-populate-deep@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/strapi-plugin-populate-deep/-/strapi-plugin-populate-deep-2.0.0.tgz#dd558eaef2fe47583a63536964b46a945e93f555"
+  integrity sha512-IsdXZPjRiOnaczoQaXI6xfxnFqUhR70uW1VCRbY4a3hEmmocpCpIUGx7TiHdNPJOZuDiueTgEIQ4V5XEru9Lvw==
+
 stream-browserify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/stream-browserify/-/stream-browserify-3.0.0.tgz#22b0a2850cdf6503e73085da1fc7b7d0c2122f2f"
