@@ -40,6 +40,12 @@
     },
     "real": {
       "type": "boolean"
+    },
+    "comparisons": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comparison.comparison",
+      "mappedBy": "image"
     }
   }
 }

@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comparisons",
+  "info": {
+    "singularName": "comparison",
+    "pluralName": "comparisons",
+    "displayName": "comparison"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "image": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::image.image",
+      "inversedBy": "comparisons"
+    },
+    "real": {
+      "type": "boolean"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}
