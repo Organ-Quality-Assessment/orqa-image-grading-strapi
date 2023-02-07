@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:14
 
 # Create directory for source code and set as working directory
 RUN mkdir -p /usr/local/src
@@ -21,7 +21,7 @@ COPY database ./database
 COPY public ./public
 COPY src ./src
 COPY package.json ./
-COPY favicon.ico ./
+#COPY favicon.ico ./
 
 # Install from source
 RUN yarn install
