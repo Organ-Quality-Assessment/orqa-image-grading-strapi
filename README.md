@@ -85,6 +85,19 @@ Deploying to a production style setup but on the local system. Examples of this 
 
 Deploying to the production system. Examples of this would include cloud, HPC or virtual machine. 
 
+
+To connect to the mySQL database in oracle, you need to first ssh into a compute instance (https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/accessinginstance.htm). You will then need to install mysql (https://docs.oracle.com/en-us/iaas/mysql-database/doc/compute-instance.html#GUID-70023ABD-5418-4C1F-975F-F3E2ABC0F93E). 
+sudo yum install mysql-shell
+
+Connect to mysql
+
+mysqlsh orqadmin@10.0.1.45
+
+To create a new user:
+\sql CREATE USER ‘nativeuser’@’localhost’IDENTIFIED WITH mysql_native_password BY ‘password’
+
+new user called orqauser
+
 ## Usage
 
 Any links to production environment, video demos and screenshots.
