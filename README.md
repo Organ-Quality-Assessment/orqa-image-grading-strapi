@@ -85,11 +85,28 @@ Deploying to a production style setup but on the local system. Examples of this 
 
 Deploying to the production system. Examples of this would include cloud, HPC or virtual machine. 
 
-## Usage
+#### Deploying to Oracle Cloud Container Instance
+You will need an up to date version of docker, and an oracle cloud account. 
+Generate an auth token https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsgenerateauthtokens.htm
 
-Any links to production environment, video demos and screenshots.
+Log into docker with oracle credentials: https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm
+`docker login lhr.ocir.io`
 
-## Roadmap
+userame in this format lrrho0j0b1ox/oracleidentitycloudservice/my.email@ncl.ac.uk password is from the auth token you generated
+
+build docker image using tag format required by the oracle container registry:
+`docker build -t docker push lhr.ocir.io/lrrho0j0b1ox/orqa-containers/orqa-strapi:latest .`
+
+push to registry
+
+`docker push lhr.ocir.io/lrrho0j0b1ox/orqa-containers/orqa-strapi:latest`
+
+Check on Oracle that the container has pushed to the correct place (initially we had some issues with the containers appearing in root, but they can easily be moved using the oracle UI if so.
+
+If there is an existing container instance on the cloud linked to the container repository then it can be refreshed to pull the latest changes.
+
+If not, or you want to make a new one, create the container instance and provide the username and password you used when logging in through docker then make sure that it is inside the same VCN as the other components (the database and the angular client). It will also need to be in the subregion A1.
+Provide the environment variables when creating the container including the DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, PORT,DATABASE_HOST, API_KEYS and fields for secrets and the api token. The database fields can be filled in by checking the details of the sql database on oracle.
 
 - [x] Initial Research  
 - [ ] Minimum viable product <-- You are Here  
