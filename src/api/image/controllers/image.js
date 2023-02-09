@@ -1,6 +1,8 @@
 'use strict';
 
 var _ = require('lodash');
+var axios = require('axios')
+
 
 
 /**
@@ -10,6 +12,17 @@ var _ = require('lodash');
 const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::image.image', ({strapi}) => ({
+    
+
+    imageFromFilename: async (ctx, next) => { 
+         let {filename} = ctx.request.params
+        
+        const url = process.env.BUCKET_URL + filename
+        
+        const response = await axios.get(url,  { responseType: 'arraybuffer' })
+        const buffer = Buffer.from(response.data, "binary").toString('base64')
+        return buffer    },
+
     imagesToGrade: async (ctx, next) => {
         const totalImages = 2
         // get images user wants to grade
