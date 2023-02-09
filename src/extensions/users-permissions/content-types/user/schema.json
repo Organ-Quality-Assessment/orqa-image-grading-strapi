@@ -63,10 +63,10 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "liver_scores": {
+    "scores": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::liver-score.liver-score",
+      "target": "api::score.score",
       "mappedBy": "users_permissions_user"
     }
   }

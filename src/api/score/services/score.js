@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * liver-score service
+ * score service
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
 
-module.exports = createCoreService('api::liver-score.liver-score');
+module.exports = createCoreService('api::score.score');

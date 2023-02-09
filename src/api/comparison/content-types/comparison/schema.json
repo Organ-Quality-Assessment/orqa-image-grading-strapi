@@ -12,12 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "image": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::image.image",
-      "inversedBy": "comparisons"
-    },
     "users_permissions_user": {
       "type": "relation",
       "relation": "oneToOne",

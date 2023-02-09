@@ -9,11 +9,11 @@
     "build": "strapi build",
     "strapi": "strapi"
   },
-  "devDependencies": {},
   "dependencies": {
     "@strapi/plugin-i18n": "4.5.5",
     "@strapi/plugin-users-permissions": "4.5.5",
     "@strapi/strapi": "4.5.5",
+    "lodash": "^4.17.21",
     "mysql": "2.18.1",
     "strapi-plugin-entity-relationship-chart": "^4.1.0",
     "strapi-plugin-populate-deep": "^2.0.0"
