@@ -24,6 +24,12 @@
         "artificial",
         "unsure"
       ]
+    },
+    "image": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::image.image",
+      "inversedBy": "comparisons"
     }
   }
 }

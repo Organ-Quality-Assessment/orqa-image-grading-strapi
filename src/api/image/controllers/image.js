@@ -12,7 +12,48 @@ var axios = require('axios')
 const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::image.image', ({strapi}) => ({
-    
+    realAndArtificalImages: async (ctx, next) => {
+        const totalImages = 2
+
+        //divide into mix of real and artifical
+        const numberReal = Math.floor(Math.random() * (totalImages - 2 + 1)) + 1;
+        const numberArtificial = totalImages - numberReal
+
+     // get all real and artifical images  
+var allReal = await strapi.entityService.findMany('api::image.image', {
+    filters: {
+        real: true
+    },
+    fields: ['id', 'real', 'filename'],
+    populate: { 
+        comparisons: { count: true}
+    }
+})
+
+var allArtificial = await strapi.entityService.findMany('api::image.image', {
+    filters: {
+        real: false
+    },
+    fields: ['id', 'real', 'filename'],
+    populate: { 
+        comparisons: { count: true}
+    }
+})
+
+// order by number of comparisons
+allReal = _.sortBy(allReal, [function(o) { return o.comparisons.count}])
+allArtificial = _.sortBy(allArtificial, [function(o) { return o.comparisons.count}])
+
+// get correct number of least scored images
+const realToGrade = allReal.slice(0, numberReal)
+const artificialToGrade = allArtificial.slice(0, numberArtificial)
+
+// shuffle images together
+const images = _.shuffle(realToGrade.concat(artificialToGrade))
+
+        return images
+
+    },
 
     imageFromFilename: async (ctx, next) => { 
          let {filename} = ctx.request.params
@@ -84,12 +125,10 @@ for (var i=0; i < organs.length; i++) {
     const organ_name = organs[i]
 
     var imagesForThatOrgan = imagesPerOrgan[organ_name]
-    imagesForThatOrgan = _.sortBy(imagesForThatOrgan, [function(o) { return o.scores}])
+    imagesForThatOrgan = _.sortBy(imagesForThatOrgan, [function(o) { return o.scores.count}])
 
     const imagesToGrade = imagesForThatOrgan.slice(0, numberRequired)
-    console.log(organ_name)
-    console.log(numberRequired)
-    console.log(imagesToGrade)    
+ 
 
     toReturn.push({
         organ_type: organ_name,
