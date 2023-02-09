@@ -87,16 +87,27 @@ Deploying to the production system. Examples of this would include cloud, HPC or
 
 
 To connect to the mySQL database in oracle, you need to first ssh into a compute instance (https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/accessinginstance.htm). You will then need to install mysql (https://docs.oracle.com/en-us/iaas/mysql-database/doc/compute-instance.html#GUID-70023ABD-5418-4C1F-975F-F3E2ABC0F93E). 
-sudo yum install mysql-shell
+
+`ssh -i filepath/ssh-key.key opc@130.162.168.182`
+where the ip is the compute instance public ip
+
+first time logging into a fresh compute instance you will need to ensure mysql shell is installed:
+`sudo yum install mysql-shell`
+Connecting to an existing instance where this has already been done means you can skip this step.
 
 Connect to mysql
 
-mysqlsh orqadmin@10.0.1.45
+`mysqlsh orqadmin@10.0.1.45`
 
 To create a new user:
-\sql CREATE USER ‘nativeuser’@’localhost’IDENTIFIED WITH mysql_native_password BY ‘password’
+`\sql CREATE USER ‘nativeuser’@’localhost’IDENTIFIED WITH mysql_native_password BY ‘password’`
 
-new user called orqauser
+new user called admin2 which we are using for our connection.
+
+Other useful commands:
+`\sql select user, plugin from mysql.user`
+check user accounts and authentication methods. Can use this syntax to find out many more things about users.
+
 
 To connect to cloud instance for connecting to the database in dev, get the private key from Sharepoint and run this command:
 chmod 400 oracle_dev_cloud_instance_key.key
