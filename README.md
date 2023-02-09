@@ -83,7 +83,30 @@ Deploying to a production style setup but on the local system. Examples of this 
 
 ### Production
 
-Deploying to the production system. Examples of this would include cloud, HPC or virtual machine. 
+Generate an auth token
+https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsgenerateauthtokens.htm 
+
+Log into docker with oracle creds:
+https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm
+
+docker login lhr.ocir.io
+
+username in this format lrrho0j0b1ox/oracleidentitycloudservice/kate.court@ncl.ac.uk
+password is from the auth token you generated
+
+build docker image using tag format required br container registry
+
+docker build -t lhr.ocir.io/lrrho0j0b1ox/orqa-containers/orqa-strapi:latest .
+
+push to registry
+
+docker push lhr.ocir.io/lrrho0j0b1ox/orqa-containers/orqa-strapi:latest
+
+I then had to move to the development compartment as this appeared in root - perhaps the naming is wrong here?
+
+Create container instance and provide the username and password you used when logging in through docker
+
+Longer term, look at putting in a github action, this might help: https://github.com/oracle-actions/login-ocir 
 
 
 To connect to the mySQL database in oracle, you need to first ssh into a compute instance (https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/accessinginstance.htm). You will then need to install mysql (https://docs.oracle.com/en-us/iaas/mysql-database/doc/compute-instance.html#GUID-70023ABD-5418-4C1F-975F-F3E2ABC0F93E). 
