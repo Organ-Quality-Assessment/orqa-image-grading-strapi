@@ -98,6 +98,12 @@ To create a new user:
 
 new user called orqauser
 
+To connect to cloud instance for connecting to the database in dev, get the private key from Sharepoint and run this command:
+chmod 400 oracle_dev_cloud_instance_key.key
+
+ssh -i oracle_dev_cloud_instance_key.
+key opc@130.162.168.182
+
 ## Usage
 
 Any links to production environment, video demos and screenshots.
@@ -176,3 +182,5 @@ Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/
 ---
 
 <sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+
+

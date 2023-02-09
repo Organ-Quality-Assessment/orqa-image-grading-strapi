@@ -1,0 +1,35 @@
+name: staging
+
+on:
+  push:
+    branches: dev
+
+jobs:
+  get-ocir-repository-test:
+    runs-on: ubuntu-22.04
+    name: Get OCIR Repository Test
+    env:
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+    steps:
+      - name: Get or create an OCIR Repository
+        uses: oracle-actions/get-ocir-repository@v1.2
+        id: get-ocir-repository
+        with:
+          name: orqa-containers
+          compartment: ${{ secrets.OCI_COMPARTMENT_OCID }}
+
+      - name: Log into OCIR
+        uses: oracle-actions/login-ocir@v1.2
+        id: login-ocir
+        with:
+          auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
+
+      - name: Tag and push a container image
+        id: tag-and-push-image
+        run: |
+          docker build -t lhr.ocir.io/lrrho0j0b1ox/orqa-containers/orqa-strapi:latest .
+          docker push lhr.ocir.io/lrrho0j0b1ox/orqa-containers/orqa-strapi:latest
