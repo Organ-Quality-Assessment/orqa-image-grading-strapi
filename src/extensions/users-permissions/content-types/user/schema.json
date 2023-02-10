@@ -68,6 +68,52 @@
       "relation": "oneToMany",
       "target": "api::score.score",
       "mappedBy": "users_permissions_user"
+    },
+    "name": {
+      "type": "string"
+    },
+    "institution": {
+      "type": "string"
+    },
+    "job": {
+      "type": "enumeration",
+      "enum": [
+        "consultant",
+        "registrar/trainee",
+        "snod",
+        "other"
+      ]
+    },
+    "experience": {
+      "type": "enumeration",
+      "enum": [
+        "less than one",
+        "one-five years",
+        "five years or more"
+      ]
+    },
+    "task": {
+      "type": "enumeration",
+      "enum": [
+        "retrieval",
+        "implanting",
+        "both"
+      ]
+    },
+    "liver": {
+      "type": "boolean"
+    },
+    "pancreas": {
+      "type": "boolean"
+    },
+    "kidney": {
+      "type": "boolean"
+    },
+    "thoracic": {
+      "type": "boolean"
+    },
+    "contactable": {
+      "type": "boolean"
     }
   }
 }

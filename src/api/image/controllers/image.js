@@ -56,10 +56,12 @@ const images = _.shuffle(realToGrade.concat(artificialToGrade))
     },
 
     imageFromFilename: async (ctx, next) => { 
-         let {filename} = ctx.request.params
+         let {dir, filename} = ctx.request.params
         
-        const url = process.env.BUCKET_URL + filename
+         
         
+        const url = process.env.BUCKET_URL + dir + '/' +filename
+         console.log(url)
         const response = await axios.get(url,  { responseType: 'arraybuffer' })
         const buffer = Buffer.from(response.data, "binary").toString('base64')
         return buffer    },
@@ -130,13 +132,15 @@ for (var i=0; i < organs.length; i++) {
     const imagesToGrade = imagesForThatOrgan.slice(0, numberRequired)
  
 
-    toReturn.push({
-        organ_type: organ_name,
-        images: imagesToGrade
-    })
+    // toReturn.push({
+    //     organ_type: organ_name,
+    //     images: imagesToGrade
+    // })
+    toReturn = toReturn.concat(imagesToGrade)
 }
 
-
+// shuffle
+toReturn = _.shuffle(toReturn)
 
         return toReturn
     }

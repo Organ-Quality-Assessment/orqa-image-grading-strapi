@@ -8,15 +8,12 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "transplantable": {
       "type": "boolean"
-    },
-    "quality": {
-      "type": "decimal"
     },
     "image": {
       "type": "relation",
@@ -29,6 +26,15 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "scores"
+    },
+    "skip": {
+      "type": "string"
+    },
+    "steatosis": {
+      "type": "decimal"
+    },
+    "perfusion": {
+      "type": "decimal"
     }
   }
 }
