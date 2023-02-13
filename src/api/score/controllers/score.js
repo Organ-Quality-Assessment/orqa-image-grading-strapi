@@ -1,12 +1,12 @@
 'use strict';
 
 /**
- * liver-score controller
+ * score controller
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-module.exports = createCoreController('api::liver-score.liver-score', ({ strapi }) => ({
+module.exports = createCoreController('api::score.score', ({ strapi }) => ({
     async create(ctx, next) {
         const user = ctx.state.user
 
@@ -15,7 +15,7 @@ module.exports = createCoreController('api::liver-score.liver-score', ({ strapi 
             users_permissions_user: user
         }
       
-        const response = await strapi.entityService.create('api::liver-score.liver-score', {data})
+        const response = await strapi.entityService.create('api::score.score', {data})
         // const response = await super.create(ctx)
         return response
     }
