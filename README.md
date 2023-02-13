@@ -33,6 +33,9 @@ If you need to change the authentication plugin used (where username is root and
 
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';
 
+Images (during development for the BTS conference):
+Once an image is in the oracle bucket, it should be placed in either the 'real' or 'artificial' folders. For each image, go to the strapi admin UI and add a new 'Image' document. The filename should be the image filename including the extension, prefaced by the folder it is stored in. For example of an image called 'image2.jpg' in the real folder, the image filename in strapi should be added as 'real/image2.jpg'. You should also create a relation with either the 'liver' or 'kidney' organ type (you may need to create entries for these in the organ collection first). Select whether the image is real using the boolean toggle. Scores and comparisons relations will be added once users use the application so you can leave blank. The origin is for once we add actual images of organs to Oracle so we can note here where they come from. Leav blank for testing. 
+
 ### Installation
 
 ```
