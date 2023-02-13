@@ -35,6 +35,9 @@
       "relation": "oneToMany",
       "target": "api::comparison.comparison",
       "mappedBy": "image"
+    },
+    "origin": {
+      "type": "text"
     }
   }
 }
