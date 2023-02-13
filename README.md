@@ -100,7 +100,7 @@ Connect to mysql
 `mysqlsh orqadmin@10.0.1.45`
 
 To create a new user:
-`\sql CREATE USER ‘nativeuser’@’localhost’IDENTIFIED WITH mysql_native_password BY ‘password’`
+`\sql CREATE USER ‘nativeuser’@’localhost’IDENTIFIED WITH mysql_native_password BY ‘password’` default role 'administrator'
 
 new user called admin2 which we are using for our connection.
 
@@ -114,6 +114,11 @@ chmod 400 oracle_dev_cloud_instance_key.key
 
 ssh -i oracle_dev_cloud_instance_key.
 key opc@130.162.168.182
+
+
+NB: on the compute instance the default node installation is 10.x, and strapi needs node version between 12-16. If it throws an error to this effect, can change the version with `nvm use 14.21`
+
+
 
 ## Usage
 
