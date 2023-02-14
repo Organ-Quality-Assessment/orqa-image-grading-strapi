@@ -157,6 +157,16 @@ container to access the logs: `sudo docker logs -f <container_ID>`
 Check the firewall status with `sudo systemctl status firewalld`, if it is on
 then you can turn it off with sudo `systemctl stop firewalld`.
 
+##### Updating the docker container
+
+1. First stop the running instance, find the id with `sudo docker ps`, then
+`sudo docker stop <instance_ID>`
+
+2. Pull the latest changes from github `git pull` 
+
+3. Rebuild the docker container and re-run it, following instructions from
+number 7 onwards above.
+
 #### Setting up the mysql database
 
 The strapi instance needs a mysql database to connect to, and when deploying on
