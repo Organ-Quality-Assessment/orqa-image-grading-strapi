@@ -71,6 +71,8 @@ console.log(images)
 
     imagesToGrade: async (ctx, next) => {
         const totalImages = process.env.NUMBERGRADINGIMAGES
+        console.log('number')
+        console.log(totalImages)
         // get images user wants to grade
         let {organs} = ctx.request.query
         organs = organs.split(',')
