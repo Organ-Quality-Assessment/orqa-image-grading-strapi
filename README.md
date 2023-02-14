@@ -142,7 +142,7 @@ Resources title, and set up the instance to access the internet.
 5. Once inside the instance, install git, yarn, node, docker and nvm (using yum,
 assuming using an oracle linux base which is closest to CentOS).
 
-6. Pull the strapi repo to the instance.
+6. Pull the strapi repo to the instance. You may need to update the environment variables in the Dockerfile using, e.g. nano.
 
 7. Build the docker container inside the repository directory using `sudo docker build -t orqa-strapi .`
 
