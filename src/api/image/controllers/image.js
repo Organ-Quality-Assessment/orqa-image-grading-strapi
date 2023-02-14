@@ -13,11 +13,13 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::image.image', ({strapi}) => ({
     realAndArtificalImages: async (ctx, next) => {
-        const totalImages = 2
+        const totalImages = process.env.NUMBERCOMPARISONIMAGES
 
         //divide into mix of real and artifical
         const numberReal = Math.floor(Math.random() * (totalImages - 2 + 1)) + 1;
         const numberArtificial = totalImages - numberReal
+
+        
 
      // get all real and artifical images  
 var allReal = await strapi.entityService.findMany('api::image.image', {
@@ -47,10 +49,11 @@ allArtificial = _.sortBy(allArtificial, [function(o) { return o.comparisons.coun
 // get correct number of least scored images
 const realToGrade = allReal.slice(0, numberReal)
 const artificialToGrade = allArtificial.slice(0, numberArtificial)
-
+console.log(realToGrade)
+console.log(artificialToGrade)
 // shuffle images together
 const images = _.shuffle(realToGrade.concat(artificialToGrade))
-
+console.log(images)
         return images
 
     },
@@ -67,7 +70,7 @@ const images = _.shuffle(realToGrade.concat(artificialToGrade))
         return buffer    },
 
     imagesToGrade: async (ctx, next) => {
-        const totalImages = 2
+        const totalImages = process.env.NUMBERGRADINGIMAGES
         // get images user wants to grade
         let {organs} = ctx.request.query
         organs = organs.split(',')
