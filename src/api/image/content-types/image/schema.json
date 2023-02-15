@@ -21,31 +21,23 @@
       "target": "api::organ.organ",
       "inversedBy": "images"
     },
-    "liver_scores": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::liver-score.liver-score",
-      "mappedBy": "image"
-    },
-    "image_file": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
     "real": {
       "type": "boolean"
+    },
+    "scores": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::score.score",
+      "mappedBy": "image"
     },
     "comparisons": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::comparison.comparison",
       "mappedBy": "image"
+    },
+    "origin": {
+      "type": "text"
     }
   }
 }

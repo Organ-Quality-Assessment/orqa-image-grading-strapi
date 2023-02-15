@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "liver_scores",
+  "collectionName": "scores",
   "info": {
-    "singularName": "liver-score",
-    "pluralName": "liver-scores",
-    "displayName": "liver_score",
+    "singularName": "score",
+    "pluralName": "scores",
+    "displayName": "score",
     "description": ""
   },
   "options": {
@@ -19,15 +19,21 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::image.image",
-      "inversedBy": "liver_scores"
+      "inversedBy": "scores"
     },
     "users_permissions_user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "liver_scores"
+      "inversedBy": "scores"
     },
-    "quality": {
+    "skip": {
+      "type": "string"
+    },
+    "steatosis": {
+      "type": "decimal"
+    },
+    "perfusion": {
       "type": "decimal"
     }
   }
