@@ -138,6 +138,7 @@ Resources title, and set up the instance to access the internet.
 
 4. Log into the instance from your local command line with `ssh -i
 .ssh/ssh-key.key opc@<instance_IP>`
+(NB, if having issues, check the ssh key has the right permission settings with `chmod 400 ssh-key.key`
 
 5. Once inside the instance, install git, yarn, node, docker and nvm (using yum,
 assuming using an oracle linux base which is closest to CentOS).
