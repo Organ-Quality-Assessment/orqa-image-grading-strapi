@@ -184,7 +184,7 @@ Oracle Cloud Shell (launch from top bar under developer tools). For the compute
 instance will first need to install mysqlsh.
 `mysqlsh <admin_username>@<mysql_server_IP>`
 The mysql server IP can be found by checking the details of the mysql database
-server on the Oracle Cloud web interface.
+server on the Oracle Cloud web interface. If you cannot connect, you may need to check the ingree rules within the private network security lists for the Virtual Cloud Network. There should be a CIDR rule for source 10.0.0.0/24 detination port 3306 (we may also need another for port 33060). We may need to refine our ingress rules to become more secure after the BTS conference. 
 
 3. Once logged into the database server, you will then need to create the
 database itself. `\sql CREATE DATABASE orqaDB`
