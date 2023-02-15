@@ -122,6 +122,8 @@ password is from the auth token you generated
 
 Longer term, look at putting in a github action, this might help: https://github.com/oracle-actions/login-ocir 
 
+Note: the deployment currently relies on creating a 'pre-authenticated request' for the bucket and using this URL as the bucket_url in the strapi env's. This option is available within the bucket on Oracle.
+
 #### Deploying as a docker container in an Oracle Compute instance
 
 Make sure you have VCN set up in advance, which will contain the strapi compute
