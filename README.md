@@ -25,13 +25,13 @@ Newcastle University
 ### Prerequisites
 Requires Node.js (v14, v16 or v18) and npm (v6 only) or yarn. Requires a database (MySQL, MariaDB, PostgreSQL or SQLite). 
 
-If using MySQL, the user Strapi uses must use the authentication plugin `mysql_native_password` (rather than the newer `caching_sha2_password`). You can check what plugin is in use byb running this SQL command (where root is the username):
+If using MySQL, the user Strapi uses must use the authentication plugin `mysql_native_password` (rather than the newer `caching_sha2_password`). You can check what plugin is in use by running this SQL command (where root is the username):
 
-SELECT user, plugin FROM mysql.user WHERE user IN ('root');
+`SELECT user, plugin FROM mysql.user WHERE user IN ('root');`
 
 If you need to change the authentication plugin used (where username is root and password is admin):
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';
+`ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';`
 
 Images (during development for the BTS conference):
 Once an image is in the oracle bucket, it should be placed in either the 'real' or 'artificial' folders. For each image, go to the strapi admin UI and add a new 'Image' document. The filename should be the image filename including the extension, prefaced by the folder it is stored in. For example of an image called 'image2.jpg' in the real folder, the image filename in strapi should be added as 'real/image2.jpg'. You should also create a relation with either the 'liver' or 'kidney' organ type (you may need to create entries for these in the organ collection first). Select whether the image is real using the boolean toggle. Scores and comparisons relations will be added once users use the application so you can leave blank. The origin is for once we add actual images of organs to Oracle so we can note here where they come from. Leav blank for testing. 
@@ -122,7 +122,7 @@ password is from the auth token you generated
 
 Longer term, look at putting in a github action, this might help: https://github.com/oracle-actions/login-ocir 
 
-Note: the deployment currently relies on creating a 'pre-authenticated request' for the bucket and using this URL as the bucket_url in the strapi env's. This option is available within the bucket on Oracle.
+Note: the deployment currently relies on creating a 'pre-authenticated request' for the bucket and using this URL as the `bucket_url` in the strapi env's. This option is available within the bucket on Oracle.
 
 #### Deploying as a docker container in an Oracle Compute instance
 
@@ -150,7 +150,7 @@ assuming using an oracle linux base which is closest to CentOS).
 7. Build the docker container inside the repository directory using `sudo docker build -t orqa-strapi .`
 
 8. Once built, run the docker container using `sudo docker run -p 1337:1337
---detach orq-strapi`
+--detach orqa-strapi`
 
 9. Check everything is working as intended by viewing the logs. First check the
 instance ID with `sudo docker ps` then use the ID that shows up for the running
@@ -195,7 +195,7 @@ database itself. `\sql CREATE DATABASE orqaDB`
 the mysql\_native\_password plugin. The strapiauthentication configuration file
 will ensure that any new users will use the native plugin by default. To create
 the new admin user, use: `\sql CREATE USER '<username>'@'<sql_server_IP>' IDENTIFIED
-BY '<password>' DEFAULT ROLE 'administrator'`
+BY '<password>' DEFAULT ROLE 'administrator'`. You can check this worked with the command `\sql select user, plugin from mysql.user where user='username'`. To view all information about a user: `\sql select * from mysql.user where user='username'`. On the production database, it was necessary to change the host for this user to "%" using `\sql rename user "admin2"@"10.0.1.67" to "admin2"@"%"`. In future we may want to limit this.
 
 5. Update the strapi environment variables to point to the database server IP, database
 name and to the new admin username and password.
