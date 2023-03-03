@@ -3,12 +3,22 @@ Strapi for image grading application to grade training data for the OrQA project
 
 ## About
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sollicitudin ante at eleifend eleifend. Sed non vestibulum nisi. Aliquam vel condimentum quam. Donec fringilla et purus at auctor. Praesent euismod vitae metus non consectetur. Sed interdum aliquet nisl at efficitur. Nulla urna quam, gravida eget elementum eget, mattis nec tortor. Fusce ut neque tellus. Integer at magna feugiat lacus porta posuere eget vitae metus.
+Transplantation is the best treatment for patients with organ failure irrespective of the organ required. Currently over 6,000
+patients are waiting in the United Kingdom. Focusing on kidney transplantation the figures are stark with a patient living twice
+as long with a transplant, when compared with dialysis, and over ten years a kidney transplant saves the NHS £420,000 per
+patient.    
 
-Curabitur a tempus arcu. Maecenas blandit risus quam, quis convallis justo pretium in. Suspendisse rutrum, elit at venenatis cursus, dolor ligula iaculis dui, ut dignissim enim justo at ligula. Donec interdum dignissim egestas. Nullam nec ultrices enim. Nam quis arcu tincidunt, auctor purus sit amet, aliquam libero. Fusce rhoncus lectus ac imperdiet varius. Sed gravida urna eros, ac luctus justo condimentum nec. Integer ultrices nibh in neque sagittis, at pretium erat pretium. Praesent feugiat purus id iaculis laoreet. Proin in tellus tristique, congue ante in, sodales quam. Sed imperdiet est tortor, eget vestibulum tortor pulvinar volutpat. In et pretium nisl.
+Organs donated for transplantation are sometimes not used because of concerns about infections or cancer, but most
+commonly because of worries that they won’t function adequately in the recipient and might lead directly to the patient dying. At
+the moment assessing organs for transplantation is subjective and depends on the skills of the surgical team. In the United
+Kingdom the rate of use of organs varies widely between centres, from 70% to 30%. This device aims to support all surgeons
+to use the achievable 70% of donated organs.
+
+This project will involve training machine learning models to score the quality of organs being considered for transplantation.
 
 ### Project Team
-Colin Wilson, Newcastle upon Tyne Hospitals NHS Foundation Trust  ([lcolin.wilson6@nhs.net](mailto:lcolin.wilson6@nhs.net))    
+Colin Wilson, Newcastle upon Tyne Hospitals NHS Foundation Trust  ([colin.wilson6@nhs.net](mailto:colin.wilson6@nhs.net))    
+Hassan Ugail, University of Bradford
 
 ### RSE Contact
 Kate Court
@@ -33,8 +43,8 @@ If you need to change the authentication plugin used (where username is root and
 
 `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';`
 
-Images (during development for the BTS conference):
-Once an image is in the oracle bucket, it should be placed in either the 'real' or 'artificial' folders. For each image, go to the strapi admin UI and add a new 'Image' document. The filename should be the image filename including the extension, prefaced by the folder it is stored in. For example of an image called 'image2.jpg' in the real folder, the image filename in strapi should be added as 'real/image2.jpg'. You should also create a relation with either the 'liver' or 'kidney' organ type (you may need to create entries for these in the organ collection first). Select whether the image is real using the boolean toggle. Scores and comparisons relations will be added once users use the application so you can leave blank. The origin is for once we add actual images of organs to Oracle so we can note here where they come from. Leav blank for testing. 
+#### Images (during development for the BTS conference):
+Once an image is in the oracle bucket, it should be placed in either the 'real' or 'artificial' folders. For each image, go to the strapi admin UI and add a new 'Image' document. The filename should be the image filename including the extension, prefaced by the folder it is stored in. For example of an image called 'image2.jpg' in the real folder, the image filename in strapi should be added as 'real/image2.jpg'. You should also create a relation with either the 'liver' or 'kidney' organ type (you may need to create entries for these in the organ collection first). Select whether the image is real using the boolean toggle. Scores and comparisons relations will be added once users use the application so you can leave blank. The origin field is to note where this image came from, e.g. from the NORIS dataset.
 
 ### Installation
 
@@ -80,11 +90,9 @@ How to run tests on your local system.
 
 ## Deployment
 
-### Local
-
-Deploying to a production style setup but on the local system. Examples of this would include `venv`, `anaconda`, `Docker` or `minikube`. 
-
 ### Production
+
+#### Deploying to an Oracle Container Instance
 
 NB: we have taken a different route of deploying on oracle for the moment, using
 docker on a compute instance (VM) as there is currently no way of assigning a
@@ -104,25 +112,30 @@ https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.
 
 `docker login lhr.ocir.io`
 
-username in this format lrrho0j0b1ox/oracleidentitycloudservice/kate.court@ncl.ac.uk
-password is from the auth token you generated
+Username is in this format `<tenancy-namespace>/<username>`, e.g. `lrrho0j0b1ox/oracleidentitycloudservice/kate.court@ncl.ac.uk`. You can find this information in the Tenancy Information page on Oracle. Password is the auth token you generated.
 
-3. build docker image using tag format required br container registry
+3. build docker image using tag format required by container registry
 
-`docker build -t lhr.ocir.io/lrrho0j0b1ox/orqa-containers/orqa-strapi:latest .`
+`docker build -t <region-key>.ocir.io/<tenancy-namespace>/<repo-name>:latest .`
+
+e.g.
+`docker build -t lhr.ocir.io/lrrho0j0b1ox/orqa-strapi:latest .`
 
 4. push to registry
 
-`docker push lhr.ocir.io/lrrho0j0b1ox/orqa-containers/orqa-strapi:latest`
+`docker push <tag>`
 
-5. NB: We then had to move to the development compartment as this appeared in root
+e.g.
+`docker push lhr.ocir.io/lrrho0j0b1ox/orqa-strapi:latest`
+
+5. NB: We then had to move the repo to the development compartment as this appeared in root
 - check on the Oracle cloud whether the container has been pushed to the correct
   compartment. It is easily moved using the UI if not.
 
+  If there is an existing container instance on the cloud linked to the container repository then it can be refreshed to pull the latest changes.
 
-Longer term, look at putting in a github action, this might help: https://github.com/oracle-actions/login-ocir 
-
-Note: the deployment currently relies on creating a 'pre-authenticated request' for the bucket and using this URL as the `bucket_url` in the strapi env's. This option is available within the bucket on Oracle.
+If not, or you want to make a new one, create the container instance and provide the username and password you used when logging in through docker then make sure that it is inside the same VCN as the other components (the database and the angular client). It will also need to be in the subregion A1.
+Provide the environment variables when creating the container including the DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, PORT,DATABASE_HOST, API_KEYS and fields for secrets and the api token. The database fields can be filled in by checking the details of the sql database on oracle.
 
 #### Deploying as a docker container in an Oracle Compute instance
 
@@ -195,7 +208,7 @@ database itself. `\sql CREATE DATABASE orqaDB`
 the mysql\_native\_password plugin. The strapiauthentication configuration file
 will ensure that any new users will use the native plugin by default. To create
 the new admin user, use: `\sql CREATE USER '<username>'@'<sql_server_IP>' IDENTIFIED
-BY '<password>' DEFAULT ROLE 'administrator'`. You can check this worked with the command `\sql select user, plugin from mysql.user where user='username'`. To view all information about a user: `\sql select * from mysql.user where user='username'`. On the production database, it was necessary to change the host for this user to "%" using `\sql rename user "admin2"@"10.0.1.67" to "admin2"@"%"`. In future we may want to limit this.
+BY '<password>' DEFAULT ROLE 'administrator'`
 
 5. Update the strapi environment variables to point to the database server IP, database
 name and to the new admin username and password.
@@ -207,12 +220,13 @@ check user accounts and authentication methods. Can use this syntax to find out 
 
 ## Usage
 
-Any links to production environment, video demos and screenshots.
+Staging: http://130.162.168.182:1337/admin/auth/login 
+Production: http://132.145.70.187:1337/admin/auth/login 
 
 ## Roadmap
 
 - [x] Initial Research  
-- [ ] Minimum viable product <-- You are Here  
+- [x] Minimum viable product   
 - [ ] Alpha Release  
 - [ ] Feature-Complete Release  
 
@@ -247,41 +261,3 @@ Please cite the associated papers for this work if you use this code:
 
 ## Acknowledgements
 This work was funded by a grant from the UK Research Councils, EPSRC grant ref. EP/L012345/1, “Example project title, please update”.
-
-
-
-
-
-
-
-# 🚀 Getting started with Strapi
-
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/developer-docs/latest/developer-resources/cli/CLI.html) (CLI) which lets you scaffold and manage your project in seconds.
-
-
-
-## ⚙️ Deployment
-
-Strapi gives you many possible deployment options for your project. Find the one that suits you on the [deployment section of the documentation](https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/deployment.html).
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://docs.strapi.io) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
-
----
-
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
-
-
