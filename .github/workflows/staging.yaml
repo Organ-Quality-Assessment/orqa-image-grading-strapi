@@ -7,6 +7,12 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
     steps:
       -
         name: Login to OCIR
@@ -27,3 +33,9 @@ jobs:
         with:
           push: true
           tags: lhr.ocir.io/lrrho0j0b1ox/orqa-strapi:latest
+      - 
+        name: Restart container
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        with:
+          command: container-instances container-instance restart --container-instance-id ocid1.computecontainerinstance.oc1.uk-london-1.anwgiljr6wufqiqa3kf2cf66fjkaikly5qh5v72hoaiuufde67wgp56b74dq --debug
+          silent: false
