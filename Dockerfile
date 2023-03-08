@@ -15,6 +15,27 @@ RUN mkdir -p /tmp
 COPY docker/ssh_setup.sh /tmp
 RUN chmod +x /tmp/ssh_setup.sh && (sleep 1;/tmp/ssh_setup.sh 2>&1 > /dev/null)
 
+# # Set environment variables
+# ENV HOST=0.0.0.0
+# ENV PORT=1337
+# ENV APP_KEYS=
+# ENV API_TOKEN_SALT=
+# ENV ADMIN_JWT_SECRET=
+# ENV JWT_SECRET=
+# ENV DATABASE_NAME=orqaDB
+# ENV DATABASE_USERNAME=admin
+# ENV DATABASE_PASSWORD=
+# ENV DATABASE_SSL=false
+# ENV DATABASE_PORT=3306
+# ENV DATABASE_HOST=
+# ENV PUBLIC_URL=
+# #http://wejustwanttoaccessthedatabase.sub02061436140.orqatestnetwork.oraclevcn.com
+# #http://130.162.168.182:1337
+# ENV PUBLIC_ADMIN_URL=
+# ENV BUCKET_URL=
+# ENV NUMBERCOMPARISONIMAGES=5
+# ENV NUMBERGRADINGIMAGES=5
+
 # Copy source code to image
 COPY config ./config
 COPY database ./database
