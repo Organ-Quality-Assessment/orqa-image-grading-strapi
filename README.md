@@ -93,6 +93,75 @@ How to run tests on your local system.
 ### Production
 
 
+#### Setting up the mysql database
+
+The strapi instance needs a mysql database to connect to, and when deploying on
+the cloud a mysql database will need to be created in the same VCN as the strapi
+and angular containers.
+
+1. Create a blank mysql database server using the Oracle Cloud web interface.
+Ensure it is created inside the same VCN (private subnet is fine) and note the
+admin login details that are created as part of the process. Select the
+configuration file that ends with 'strapiauthentication'.
+
+2. Log into the database either using the strapi compute instance or using the
+Oracle Cloud Shell (launch from top bar under developer tools). For the compute
+instance will first need to install mysqlsh.
+`mysqlsh <admin_username>@<mysql_server_IP>`
+The mysql server IP can be found by checking the details of the mysql database
+server on the Oracle Cloud web interface. If you cannot connect, you may need to check the ingree rules within the private network security lists for the Virtual Cloud Network. There should be a CIDR rule for source 10.0.0.0/24 detination port 3306 (we may also need another for port 33060). We may need to refine our ingress rules to become more secure after the BTS conference. 
+
+3. Once logged into the database server, you will then need to create the
+database itself. `\sql CREATE DATABASE orqaDB`
+
+4. We also need to create a new admin username that will be authenticated using
+the mysql\_native\_password plugin. The strapiauthentication configuration file
+will ensure that any new users will use the native plugin by default. To create
+the new admin user, use: `\sql CREATE USER '<username>'@'<sql_server_IP>' IDENTIFIED
+BY '<password>' DEFAULT ROLE 'administrator'`
+
+5. Update the strapi environment variables to point to the database server IP, database
+name and to the new admin username and password.
+
+
+Other useful commands:
+`\sql select user, plugin from mysql.user`
+check user accounts and authentication methods. Can use this syntax to find out many more things about users.
+
+#### Deploying to an Oracle Container Instance
+
+NB: it is possible to assign the strapi public_url env variable to a orqa.uk URL, and then use DNS to route this URL to the newly generated IP address of the container instance so we have been able to switch from using a VM to using a container instance for strapi.
+
+There is now a GitHub Action for building an image and pushing to the Oracle Container Registry. Once the Action is complete, restart the corrosponding Container Instance through the OCI CLI or the UI. To set up the container for the first time, or if GitHub Actions breaks, follow these instructions.
+
+1. Generate an auth token
+https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsgenerateauthtokens.htm 
+
+2. Log into docker with oracle creds:
+https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm
+
+`docker login lhr.ocir.io`
+
+Username is in this format `<tenancy-namespace>/<username>`, e.g. `lrrho0j0b1ox/oracleidentitycloudservice/kate.court@ncl.ac.uk`. You can find this information in the Tenancy Information page on Oracle. Password is the auth token you generated.
+
+3. build docker image using tag format required by container registry
+
+`docker build -t <region-key>.ocir.io/<tenancy-namespace>/<repo-name>:latest .`
+
+e.g.
+`docker build -t lhr.ocir.io/lrrho0j0b1ox/orqa-strapi:latest .`
+
+4. push to registry
+
+`docker push <tag>`
+
+e.g.
+`docker push lhr.ocir.io/lrrho0j0b1ox/orqa-strapi:latest`
+
+5. If there is an existing container instance on the cloud linked to the container repository then it can be refreshed to pull the latest changes.
+
+If not, or you want to make a new one, create the container instance and provide the username and password you used when logging in through docker then make sure that it is inside the same VCN as the other components (the database and the angular client). It will also need to be in the subregion A1.
+Provide the environment variables when creating the container including the DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, PORT,DATABASE_HOST, API_KEYS and fields for secrets and the api token. The database fields can be filled in by checking the details of the sql database on oracle.
 
 #### Deploying as a docker container in an Oracle Compute instance
 
@@ -137,88 +206,7 @@ then you can turn it off with sudo `systemctl stop firewalld`.
 
 2. Pull the latest changes from github `git pull` 
 
-3. Rebuild the docker container and re-run it, following instructions from
-number 7 onwards above.
-
-#### Setting up the mysql database
-
-The strapi instance needs a mysql database to connect to, and when deploying on
-the cloud a mysql database will need to be created in the same VCN as the strapi
-and angular containers.
-
-1. Create a blank mysql database server using the Oracle Cloud web interface.
-Ensure it is created inside the same VCN (private subnet is fine) and note the
-admin login details that are created as part of the process. Select the
-configuration file that ends with 'strapiauthentication'.
-
-2. Log into the database either using the strapi compute instance or using the
-Oracle Cloud Shell (launch from top bar under developer tools). For the compute
-instance will first need to install mysqlsh.
-`mysqlsh <admin_username>@<mysql_server_IP>`
-The mysql server IP can be found by checking the details of the mysql database
-server on the Oracle Cloud web interface. If you cannot connect, you may need to check the ingree rules within the private network security lists for the Virtual Cloud Network. There should be a CIDR rule for source 10.0.0.0/24 detination port 3306 (we may also need another for port 33060). We may need to refine our ingress rules to become more secure after the BTS conference. 
-
-3. Once logged into the database server, you will then need to create the
-database itself. `\sql CREATE DATABASE orqaDB`
-
-4. We also need to create a new admin username that will be authenticated using
-the mysql\_native\_password plugin. The strapiauthentication configuration file
-will ensure that any new users will use the native plugin by default. To create
-the new admin user, use: `\sql CREATE USER '<username>'@'<sql_server_IP>' IDENTIFIED
-BY '<password>' DEFAULT ROLE 'administrator'`
-
-5. Update the strapi environment variables to point to the database server IP, database
-name and to the new admin username and password.
-
-
-Other useful commands:
-`\sql select user, plugin from mysql.user`
-check user accounts and authentication methods. Can use this syntax to find out many more things about users.
-
-#### Deploying to an Oracle Container Instance
-
-NB: we have taken a different route of deploying on oracle for the moment, using
-docker on a compute instance (VM) as there is currently no way of assigning a
-static IP in advance for a container instance, which means we cannot know what
-external url to assign to the environment variables, and unfortunately oracle
-also does not allow retrospective altering of environment variables on contianer
-instances.
-That said, this may prove useful in future when static IPs are implemented for 
-container instances.
-
-
-1. Generate an auth token
-https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsgenerateauthtokens.htm 
-
-2. Log into docker with oracle creds:
-https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm
-
-`docker login lhr.ocir.io`
-
-Username is in this format `<tenancy-namespace>/<username>`, e.g. `lrrho0j0b1ox/oracleidentitycloudservice/kate.court@ncl.ac.uk`. You can find this information in the Tenancy Information page on Oracle. Password is the auth token you generated.
-
-3. build docker image using tag format required by container registry
-
-`docker build -t <region-key>.ocir.io/<tenancy-namespace>/<repo-name>:latest .`
-
-e.g.
-`docker build -t lhr.ocir.io/lrrho0j0b1ox/orqa-strapi:latest .`
-
-4. push to registry
-
-`docker push <tag>`
-
-e.g.
-`docker push lhr.ocir.io/lrrho0j0b1ox/orqa-strapi:latest`
-
-5. NB: We then had to move the repo to the development compartment as this appeared in root
-- check on the Oracle cloud whether the container has been pushed to the correct
-  compartment. It is easily moved using the UI if not.
-
-  If there is an existing container instance on the cloud linked to the container repository then it can be refreshed to pull the latest changes.
-
-If not, or you want to make a new one, create the container instance and provide the username and password you used when logging in through docker then make sure that it is inside the same VCN as the other components (the database and the angular client). It will also need to be in the subregion A1.
-Provide the environment variables when creating the container including the DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, PORT,DATABASE_HOST, API_KEYS and fields for secrets and the api token. The database fields can be filled in by checking the details of the sql database on oracle.
+3. Rebuild the docker container and re-run it, following instructions from number 7 onwards above.
 
 ## Usage
 
